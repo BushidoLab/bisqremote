@@ -10,7 +10,7 @@ src/main/resources/push_certificate.production.p12
 iOS_certificate_password
 
 # Push certificate Android
-serviceAccountKey.json
+# serviceAccountKey.json
 
 # IDEA
 .idea

@@ -34,6 +34,11 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.io.InputStreamReader;
 
 public class NotificationApp extends Application {
     private Logger logger = LoggerFactory.getLogger(getClass().getName());
@@ -179,11 +184,38 @@ public class NotificationApp extends Application {
         gridPane.add(label, 0, rowindex, 1, 1);
         GridPane.setHalignment(label, HPos.RIGHT);
         testButton = new Button("TEST");
+        
+        try {
+            ServerSocket serverSocket = new ServerSocket(7777);
+            new Thread("Device Listener") {
+                public void run() {
+                    PrintWriter out;
+                    BufferedReader in;
+                
+                    try {
+                        System.out.println("Listener Running . . .");
+                        Socket socket = null;
+                        // clientSocket = serverSocket.accept();
+                        while ((socket = serverSocket.accept()) != null) {
+                            out = new PrintWriter(socket.getOutputStream(), true);
+                            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                            
+                            System.out.println("| Incoming : "+ in);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                };
+            }.start();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
         testButton.setOnAction((event) -> {
             if (phone.isInitialized) {
                 BisqNotification n = new BisqNotification(phone);
                 n.type = NotificationTypes.TRADE.name();
-                n.title = "Bisq test notification "+testCounter;
+                n.title = "test "+testCounter;
                 testCounter += 1;
                 n.message = "message text";
                 send(n, soundCheckBox.isSelected(), isContentAvailable());
