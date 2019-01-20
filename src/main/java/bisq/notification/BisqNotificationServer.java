@@ -30,7 +30,7 @@ public class BisqNotificationServer {
     public static final String IOS_CERTIFICATE_FILE = "push_certificate.production.p12";
     public static final String IOS_PASSWORD_FILE = "iOS_certificate_password";
     public static final String ANDROID_CERTIFICATE_FILE = "serviceAccountKey.json";
-    public static final String ANDROID_DATABASE_URL = "https://bisqnotifications.firebaseio.com";
+    public static final String ANDROID_DATABASE_URL = "https://bisquits-e308b.firebaseio.com";
 
     BisqNotificationServer() {
         try {
@@ -40,7 +40,7 @@ public class BisqNotificationServer {
             // ***
             // *** Android
             // ***
-
+            
             InputStream resource_Android = classLoader.getResourceAsStream(ANDROID_CERTIFICATE_FILE);
             if (resource_Android == null) {
                 throw new IOException(ANDROID_CERTIFICATE_FILE+" does not exist");
@@ -57,30 +57,30 @@ public class BisqNotificationServer {
             // *** iOS
             // ***
 
-            String password = "";
-            URL password_iOS = classLoader.getResource(IOS_PASSWORD_FILE);
-            if (password_iOS == null) {
-                throw new IOException(IOS_PASSWORD_FILE+" does not exist");
-            } else {
-                File passwordFile = new File(password_iOS.getFile());
-                BufferedReader br = new BufferedReader(new FileReader(passwordFile));
-                password = br.readLine();
-            }
-            URL resource_iOS = classLoader.getResource(IOS_CERTIFICATE_FILE);
-            if (resource_iOS == null) {
-                throw new IOException(IOS_CERTIFICATE_FILE+" does not exist");
-            } else {
-                File p12File = new File(resource_iOS.getFile());
-                logger.info("Using iOS certification file {}.", p12File.getAbsolutePath());
-                apnsClientProduction = new ApnsClientBuilder()
-                        .setApnsServer(ApnsClientBuilder.PRODUCTION_APNS_HOST)
-                        .setClientCredentials(p12File, password)
-                        .build();
-                apnsClientDevelopment = new ApnsClientBuilder()
-                        .setApnsServer(ApnsClientBuilder.DEVELOPMENT_APNS_HOST)
-                        .setClientCredentials(p12File, password)
-                        .build();
-            }
+            // String password = "";
+            // URL password_iOS = classLoader.getResource(IOS_PASSWORD_FILE);
+            // if (password_iOS == null) {
+            //     throw new IOException(IOS_PASSWORD_FILE+" does not exist");
+            // } else {
+            //     File passwordFile = new File(password_iOS.getFile());
+            //     BufferedReader br = new BufferedReader(new FileReader(passwordFile));
+            //     password = br.readLine();
+            // }
+            // URL resource_iOS = classLoader.getResource(IOS_CERTIFICATE_FILE);
+            // if (resource_iOS == null) {
+            //     throw new IOException(IOS_CERTIFICATE_FILE+" does not exist");
+            // } else {
+            //     File p12File = new File(resource_iOS.getFile());
+            //     logger.info("Using iOS certification file {}.", p12File.getAbsolutePath());
+            //     apnsClientProduction = new ApnsClientBuilder()
+            //             .setApnsServer(ApnsClientBuilder.PRODUCTION_APNS_HOST)
+            //             .setClientCredentials(p12File, password)
+            //             .build();
+            //     apnsClientDevelopment = new ApnsClientBuilder()
+            //             .setApnsServer(ApnsClientBuilder.DEVELOPMENT_APNS_HOST)
+            //             .setClientCredentials(p12File, password)
+            //             .build();
+            // }
 
         } catch (IOException e) {
             e.printStackTrace();
